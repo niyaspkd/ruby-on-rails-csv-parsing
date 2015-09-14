@@ -5,12 +5,28 @@ CSV.foreach("employer.csv", { encoding: "UTF-8", headers: true, header_converter
  employee=Employee.new
  employee.name = row[0]
  employee.badge_id = row[1]
- ds=Designation.where(name: row[2]).first
+ if Designation.where(name: row[2]).count==0  
+   ds=Designation.new
+   ds.name=row[2]
+   ds.save!
+   employee.designation_id=ds.id
+   employee.save!
+
+ else
+   ds=Designation.where(name: row[2]).first.id
+   employee.designation_id=ds
+   employee.save!
+ end
+  
+
+
+   
+
+   
+ end
  
- employee.designation_id=ds.id
- 
- employee.save!
+
   
  
   
-end
+
